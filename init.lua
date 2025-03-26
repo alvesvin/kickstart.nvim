@@ -281,6 +281,7 @@ require('lazy').setup({
 
   { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
+    tag = 'v3.13.2',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     opts = {
       -- delay between pressing a key and opening which-key (milliseconds)
@@ -656,6 +657,26 @@ require('lazy').setup({
         -- ts_ls = {},
         --
 
+        ts_ls = {
+          root_dir = function(fname)
+            local util = require 'lspconfig.util'
+            local deno_root = util.root_pattern('deno.json', 'deno.jsonc')(fname)
+            if deno_root then
+              -- If `denols` root is detected, prevent tsserver from loading
+              return nil
+            end
+            return util.root_pattern('package.json', 'tsconfig.json')(fname) -- tsserver root
+          end,
+          single_file_support = false,
+        },
+
+        denols = {
+          root_dir = function(fname)
+            local util = require 'lspconfig.util'
+            return util.root_pattern 'deno.json'(fname)
+          end,
+        },
+
         lua_ls = {
           -- cmd = { ... },
           -- filetypes = { ... },
@@ -747,6 +768,7 @@ require('lazy').setup({
         javascript = { 'prettierd', stop_after_first = true },
         typescript = { 'prettierd', stop_after_first = true },
         typescriptreact = { 'prettierd', stop_after_first = true },
+        markdown = { 'prettierd', stop_after_first = true },
       },
     },
   },
@@ -865,6 +887,7 @@ require('lazy').setup({
           { name = 'luasnip' },
           { name = 'path' },
           { name = 'nvim_lsp_signature_help' },
+          { name = 'supermaven' },
         },
       }
     end,
@@ -971,9 +994,10 @@ require('lazy').setup({
   require 'kickstart.plugins.indent_line',
   require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
-  require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
-
+  require 'kickstart.plugins.neo-tree',
+  require 'kickstart.plugins.autotag',
+  require 'kickstart.plugins.gitsigns',
+  require 'custom.plugins.dap',
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
   --
