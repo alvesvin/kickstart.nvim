@@ -653,11 +653,11 @@ require('lazy').setup({
         -- Some languages (like typescript) have entire language plugins that can be useful:
         --    https://github.com/pmizio/typescript-tools.nvim
         --
-        -- But for many setups, the LSP (`ts_ls`) will work just fine
-        -- ts_ls = {},
+        -- But for many setups, the LSP (`tsserver`) will work just fine
+        -- tsserver = {},
         --
 
-        ts_ls = {
+        tsserver = {
           root_dir = function(fname)
             local util = require 'lspconfig.util'
             local deno_root = util.root_pattern('deno.json', 'deno.jsonc')(fname)
